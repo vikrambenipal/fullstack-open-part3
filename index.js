@@ -2,6 +2,9 @@ const { response } = require('express');
 const express = require('express');
 const app = express();
 
+// express json parser: recognize incoming request object as a json object 
+app.use(express.json())
+
 // phonebook entry data 
 const entries = [
     { 
@@ -58,6 +61,19 @@ app.delete('/api/persons/:id', (req,res) => {
     const id = Number(req.params.id);
     entries.filter(entry => entry.id !== id)
     res.status(204).end();
+})
+
+const generateID = () => {
+    const min = 0;
+    const max = 2000;
+    return Math.floor(Math.random() * (max - min) + min);
+}
+// 3.5 add a new entry to the phone book 
+app.post('/api/persons', (req,res) => {
+    const body = req.body;
+    const id = generateID();
+    body.id = id;
+    res.json(body);
 })
 
 const PORT = 3001;
