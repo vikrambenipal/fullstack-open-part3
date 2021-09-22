@@ -71,6 +71,23 @@ const generateID = () => {
 // 3.5 add a new entry to the phone book 
 app.post('/api/persons', (req,res) => {
     const body = req.body;
+
+    // 3.6 check if name or number is missing 
+    if(!body.name || !body.number){
+        return res.status(400).json({
+            error: "missing content"
+        })
+    }
+
+    // 3.6 check if name is unique 
+    entries.forEach(entry => {
+        if(entry.name === body.name){
+            return res.status(400).json({
+                error: "name must be unique"
+            })
+        }
+    })
+
     const id = generateID();
     body.id = id;
     res.json(body);
