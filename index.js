@@ -1,8 +1,7 @@
-console.log("hello world");
-const { response } = require('express');
 const express = require('express');
 const app = express();
 
+// phonebook entry data 
 const entries = [
     { 
       "id": 1,
@@ -26,8 +25,20 @@ const entries = [
     }
 ]
 
+app.get('/', (req,res) => {
+    res.send('<h1>Hello World!</h1>');
+})
+
+// 3.1 show phonebook entries for persons 
 app.get('/api/persons', (req,res) => {
-    response.json(entries);
+    res.json(entries);
+})
+
+// 3.2 phonebook info 
+app.get('/info', (req,res) => {
+    const len = entries.length;
+    const date = new Date();
+    res.send(`Phonebook has info for ${len} people <br><br> ${date} `);
 })
 
 const PORT = 3001;
