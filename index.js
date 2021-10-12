@@ -1,12 +1,16 @@
 const { response } = require('express');
 const express = require('express');
+const cors = require('cors')
 const app = express();
 
+// middleware
 // express json parser: recognize incoming request object as a json object 
 app.use(express.json())
 
+app.use(cors())
+
 // phonebook entry data 
-const entries = [
+let entries = [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -58,8 +62,9 @@ app.get('/api/persons/:id', (req,res) => {
 
 // 3.4 delete resource 
 app.delete('/api/persons/:id', (req,res) => {
+    console.log("HERE")
     const id = Number(req.params.id);
-    entries.filter(entry => entry.id !== id)
+    entries = entries.filter(entry => entry.id !== id)
     res.status(204).end();
 })
 
@@ -90,10 +95,11 @@ app.post('/api/persons', (req,res) => {
 
     const id = generateID();
     body.id = id;
+    entries.push(body)
     res.json(body);
 })
 
-const PORT = 3001;
+const PORT = process.env || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 })
